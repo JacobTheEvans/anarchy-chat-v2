@@ -1,0 +1,20 @@
+{
+  "name": "anarchy",
+  "version": "1.0.0",
+  "description": "A website chat room with no moderators.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob Evans",
+  "license": "Apache 2.0 license",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "jsonwebtoken": "^5.5.4",
+    "mongoose": "^4.4.3",
+    "path": "^0.12.7",
+    "socket.io": "^1.4.5"
+  }
+}
