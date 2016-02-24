@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anarchy Chat</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="/views/favicon.ico">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.red-orange.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body ng-app="chat">
+  <div ng-controller="chatController">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+      <header class="mdl-layout__header mdl-chat__header">
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+          <a class="mdl-navigation__link nav-link nav-chat-link" href="" ng-click="logout()">Logout <i class="fa fa-sign-out"></i></a>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title drawer-title custom-title">Anarchy Chat <i class="fa fa-comment"></i></span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link online-amount drawer-link" href=""><i class="fa fa-users"></i> 54 Users Online</a>
+          <a class="mdl-navigation__link drawer-link" href="">Jacob</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div class="chat-area">
+        </div>
+        <div class="input-area">
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--10-col">
+              <input class="mdl-textfield__input chat-input mdl-shadow--2dp" type="text" id="message">
+            </div>
+            <div class="mdl-cell mdl-cell--2-col">
+              <button class="submit-btn mdl-shadow--2dp"><i class="fa fa-comment"></i></a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="/js/angular.min.js"></script>
+  <script src="/js/chat.js"></script>
+  <script src="/js/angularSlideables.js"></script>
+  <script src="/js/angular-cookies.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script>
+  //Fix for mdl drawer
+  $(document).mousedown(function (e) {
+    var container = $(".mdl-layout__drawer");
+    var button = $(".mdl-layout__drawer-button");
+    if(!container.is(e.target) && !button.is(e.target) && container.has(e.target).length === 0) {
+      container.removeClass("is-visible");
+    }
+  });
+  </script>
+</body>
+</html>

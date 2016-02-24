@@ -1,0 +1,178 @@
+body,html {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.mdl-layout__header {
+  background-color: #E53935 !important;
+  color: white;
+}
+
+.mdl-chat__header a {
+  color: #555459;
+}
+
+.mdl-chat__header {
+  background-color: white !important;
+  color: #555459;
+}
+
+.nav-link {
+  font-size: 17px !important;
+}
+
+.logo-box {
+  margin-top: 130px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.logo-sep {
+  height: 4px;
+  width: 72%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #E53935;
+}
+
+.logo-main {
+  text-align: center;
+  color: #464646 !important;
+  font-size: 85px;
+}
+
+.logo-sub {
+  text-align: center;
+  font-size: 30px;
+  color: grey !important;
+}
+
+.add-btn {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #E53935 !important;
+  color: white !important;
+}
+
+.custom-card {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.card_title {
+  color: grey !important;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center !important;
+}
+
+.large_text {
+  font-size: 18px !important;
+}
+
+.center {
+  text-align: center;
+}
+
+.info_box {
+  width: 100%;
+  margin-left: -60px;
+}
+
+.color-red {
+  color: #E53935;
+}
+
+.info-seciton {
+  margin-top: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+}
+
+.header-logo {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-chat-link {
+  color: #555459 !important;
+}
+
+.mdl-layout__drawer-button {
+  color: #555459 !important;
+}
+
+.mdl-layout__drawer {
+  color: white;
+  background-color: #E53935 !important;
+}
+
+.drawer-link {
+  color: white !important;
+  font-size: 15px;
+}
+
+.drawer-link:hover {
+  background-color: #E57373 !important;
+}
+
+.online-amount {
+  font-size: 17px;
+}
+
+.online-amount:hover {
+  background-color: #E53935 !important;
+}
+
+.drawer-title {
+  margin-top: 5px;
+  margin-bottom: -20px;
+}
+
+.chat-input {
+  border-color: #9C9C9C;
+  border-style: solid;
+  border-width: 1px;
+  padding: 10px;
+  padding-left: 20px;
+  text-align: left;
+  width: 100%;
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.submit-btn {
+  margin-top: -2px;
+  width: 100%;
+  background-color: #E53935;
+  border-color: #9C9C9C;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  color: white;
+  padding: 13px;
+}
+
+
+.input-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 1023px) {
+  .custom-title {
+    margin-left: -15px;
+  }
+  .online-amount {
+    margin-left: -15px !important;
+  }
+}

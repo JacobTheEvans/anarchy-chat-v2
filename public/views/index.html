@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anarchy Chat</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="/views/favicon.ico">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.red-orange.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body ng-app="login">
+  <div ng-controller="loginController">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title"><a class="header-logo" href="/">Anarchy Chat <i class="fa fa-comment"></i></a></span>
+          <div class="mdl-layout-spacer"></div>
+          <a class="mdl-navigation__link nav-link" href="http://jacobtheevans.com/#/home">Author <i class="fa fa-user"></i></a>
+          <a class="mdl-navigation__link nav-link" href="https://github.com/JacobTheEvans/AnarchyChatv2">Source <i class="fa fa-github"></i></a>
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+        <div class="logo-box">
+          <h1 class="logo-main">Anarchy Chat <i class="fa fa-comment"></i></h1>
+          <div class="logo-sep"></div>
+          <h2 class="logo-sub">No Moderators Only Mob Rule.</h2>
+        </div>
+        <div class="center">
+          <a ng-click="toggleLogButtonShow()" ng-if="buttonVis" slide-toggle="#login_box" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent add-btn">Try It</a>
+        </div>
+        <div id="login_box" class="slideable">
+          <div class="mdl-grid info-seciton">
+            <div class="mdl-cell mdl-cell--6-col">
+              <div class="info_box">
+                <h3 class="color-red">Anarchy Chat Details</h3>
+                <p class="large_text">Anarchy chat has no moderators. Instead it uses the <span class="color-red">'!kick username'</span> command to kick users based majority vote. Although the amount of votes needed to kick a user decreases as more users join.</p>
+              </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+              <div class="custom-card mdl-card mdl-shadow--4dp">
+              <div class="mdl-card__title">
+              </div>
+              <div class="mdl-card__supporting-text">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input large_text" type="text" id="username" ng-model="username">
+                  <label class="mdl-textfield__label" for="username">Username</label>
+                </div>
+                <a ng-click="login(username)" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent add-btn">Login</a>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="/js/angular.min.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/angularSlideables.js"></script>
+  <script src="/js/angular-cookies.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script>
+  //Fix for mdl drawer
+  $(document).mousedown(function (e) {
+    var container = $(".mdl-layout__drawer");
+    var button = $(".mdl-layout__drawer-button");
+    if(!container.is(e.target) && !button.is(e.target) && container.has(e.target).length === 0) {
+      container.removeClass("is-visible");
+    }
+  });
+  </script>
+</body>
+</html>
