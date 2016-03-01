@@ -25,28 +25,40 @@
       <div class="mdl-layout__drawer">
         <span class="mdl-layout-title drawer-title custom-title">Anarchy Chat <i class="fa fa-comment"></i></span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link online-amount drawer-link" href=""><i class="fa fa-users"></i> 54 Users Online</a>
-          <a class="mdl-navigation__link drawer-link" href="">Jacob</a>
+          <a class="mdl-navigation__link online-amount drawer-link" href=""><i class="fa fa-users"></i> {{numOfUsers}} Users Online</a>
+          <a class="mdl-navigation__link drawer-link" href="" ng-repeat="user in users track by $index">{{user}}</a>
         </nav>
       </div>
-      <main class="mdl-layout__content">
-        <div class="chat-area">
+      <main class="mdl-layout__content" ng-init="startIo()">
+        <div id="chat-box" class="chat-area">
+          <div class="chat" ng-repeat="chat in chats | orderBy: 'created_at':false track by $index">
+            <div class="user-name-chat">
+              <b>{{chat.user}}</b><span class="date-text"> {{formatDate(chat.created_at)}}</span>
+            </div>
+            <div class="user-chat">
+              {{chat.message}}
+            </div>
+          </div>
         </div>
         <div class="input-area">
           <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--10-col">
-              <input class="mdl-textfield__input chat-input mdl-shadow--2dp" type="text" id="message">
+              <form ng-submit="postChat()">
+                <input class="mdl-textfield__input chat-input mdl-shadow--2dp" type="text" id="message" ng-model="userMessage">
+              </form>
             </div>
             <div class="mdl-cell mdl-cell--2-col">
-              <button class="submit-btn mdl-shadow--2dp"><i class="fa fa-comment"></i></a>
+              <button class="submit-btn mdl-shadow--2dp" ng-click="postChat()"><i class="fa fa-comment"></i></a>
             </div>
           </div>
         </div>
       </main>
     </div>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/js/angular.min.js"></script>
   <script src="/js/chat.js"></script>
+  <script src="/js/angular-socket.js"></script>
   <script src="/js/angularSlideables.js"></script>
   <script src="/js/angular-cookies.min.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
