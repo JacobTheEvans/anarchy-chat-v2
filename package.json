@@ -12,6 +12,7 @@
     "body-parser": "^1.15.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
+    "express-ipfilter": "0.0.24",
     "jsonwebtoken": "^5.5.4",
     "mongoose": "^4.4.3",
     "path": "^0.12.7",

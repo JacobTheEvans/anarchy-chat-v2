@@ -10,7 +10,7 @@ app.service("requests", ["$http", function($http) {
   this.getUsers = function(token,isSuc,isFail) {
     var data = {
       "token": token
-    }
+    };
     $http.post("http://localhost:8080/users",data).then(isSuc,isFail);
   };
 }]);
@@ -42,12 +42,23 @@ app.controller("chatController", ["requests", "$scope", "$cookies", "io", functi
   $scope.logError = function(response) {
     console.log("ERROR, Status code: " + response.status + ", Status text: " + response.statusText);
   };
+  $scope.kickShortcut = function(username) {
+    $scope.userMessage = "!kick " + username;
+  };
   $scope.startIo = function() {
     socket = io.connect(cookie_user_token);
     io.getChat(socket,$scope.update);
   };
   $scope.postChat = function() {
-    io.emitChat(socket,$scope.userMessage,cookie_user_token);
+    if($scope.userMessage == "") {
+      alert("Message must contain text")
+    }
+    else if($scope.userMessage.indexOf("!kick") == -1) {
+      io.emitChat(socket,$scope.userMessage,cookie_user_token);
+    } else {
+      var selectedUser = $scope.userMessage.replace(" ","").replace("!kick","");
+      io.emitKick(socket,selectedUser,cookie_user_token);
+    }
     $scope.userMessage = "";
   };
   $scope.setUsers = function(response) {

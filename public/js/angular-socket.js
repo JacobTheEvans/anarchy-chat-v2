@@ -11,6 +11,13 @@ app.service("io", [function() {
     };
     socket.emit("message", data);
   };
+  this.emitKick = function(socket,username,token) {
+    var data = {
+      selected_user: username,
+      token: token
+    }
+    socket.emit("kick",data);
+  };
   this.getChat = function(socket,onSuc) {
     socket.on("message", function(data) {
       onSuc(data);

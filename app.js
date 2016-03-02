@@ -3,14 +3,16 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var jwt = require("jsonwebtoken");
 var path = require("path");
+var ipfilter = require("express-ipfilter")
 
 //server setup
 var app = express();
 var server = app.listen(8080);
 var io = require("socket.io")(server);
 
-//user schema
+//data schemas
 var User = require("./model.js").User;
+var Ip = require("./model.js").Ip;
 
 //secret for JWT encryption
 var secret = require("./config.js").secret;
@@ -30,6 +32,17 @@ app.set("views", __dirname + "/public/views");
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "ejs");
 
+//filter blocked ips
+app.use(ipfilter(
+  Ip.find({}, function(err, ips) {
+    result = [];
+    for(var i = 0; i < ips.length; i++) {
+      result.push(ips.ip);
+    }
+    return result;
+  })
+));
+
 //server endpoints
 app.get("/", function(req, res) {
   res.render("index.html");
@@ -39,6 +52,9 @@ app.post("/login", function(req,res) {
   if(!req.body.username) {
     res.status(400).send({pass: false, message: "Username not provided in JSON request"});
   } else {
+    if(req.body.username.indexOf(" ") != -1) {
+      res.status(422).send({pass: false, message: "Username contains spaces"});
+    }
     User.findOne({username: req.body.username}, function(err, user) {
       if(err) {
         res.status(500).send(err);
@@ -50,7 +66,8 @@ app.post("/login", function(req,res) {
           });
           var userData = {
             username: req.body.username,
-            token: token
+            token: token,
+            users_kick: ["Server"]
           };
           var newUser = new User(userData);
           newUser.save(function(err, data) {
@@ -127,12 +144,8 @@ app.post("/users", function(req, res) {
 app.get("/chat", function(req, res) {
   res.render("chat.html");
 });
-//Socket.io chat section
-//Allow votes to kick user
-//Echo when users enters
-//Echo when user leaves or is kicked then remove them from server
-//DONE Echo chat request to all users
 
+//Socket.io chat section
 io.use(function(socket, next) {
   var handshakeData = socket.request;
   if(!handshakeData.headers.cookie) {
@@ -171,7 +184,11 @@ io.on("connection", function(socket) {
               console.log(err);
             } else {
               if(user) {
-                io.emit("message", {"user": user.username, "message": data.message, "update": false, "time": today});
+                if(data.message != "") {
+                  io.emit("message", {"user": user.username, "message": data.message, "update": false, "time": today});
+                } else {
+                  io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Your message must contain text", "update": false, "time": today});
+                }
               } else {
                 io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Invalid token. Please revalidated token", "update": false, "time": today});
               }
@@ -181,7 +198,77 @@ io.on("connection", function(socket) {
       });
     }
   });
-  socket.on("disconnect", function() {
-    console.log("User has disconnected");
+  socket.on("kick", function(data) {
+    var date = new Date();
+    today = date.getTime();
+    if(!data.token) {
+      io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Must be logged to use service", "update": false, "time": today});
+    } else if(!data.selected_user) {
+      io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Must supply a username to vote to kick", "update": false, "time": today});
+    } else {
+      jwt.verify(token, secret, function(err, decoded) {
+        if(err) {
+          io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Invalid token. Please revalidated token", "update": false, "time": today});
+        } else {
+          User.findOne({token: token}, function(err, user) {
+            if(err) {
+              console.log(err);
+            } else {
+              if(user) {
+                User.findOne({username: data.selected_user}, function(err, selectedUser) {
+                  if(selectedUser) {
+                    var selected_userName = selectedUser.username;
+                    if(selectedUser.users_kick.indexOf(user.username) == -1) {
+                      selectedUser.users_kick.push(user.username);
+                      selectedUser.save();
+                      io.emit("message", {"user": "Server", "message": user.username + " has voted to kick " + selected_userName, "update": false, "time": today});
+                      User.find({}, function(err, users) {
+                        var online = users.length;
+                        var amount = -1;
+                        if (online <= 3) {
+                          amount = -1;
+                        } else if(online <= 10) {
+                          amount = Math.round(online * .75);
+                        } else if(online <= 20) {
+                          amount = Math.round(online * .50);
+                        } else if(online <= 50) {
+                          amount = Math.round(online * .30);
+                        } else if(online <= 100) {
+                          amount = Math.round(online * .10);
+                        } else {
+                          amount = Math.round(online  * .07);
+                        }
+                        if(selectedUser.users_kick.length >= amount && amount != -1) {
+                          username = selectedUser.username;
+                          selectedUser.remove();
+                          selectedUser.save();
+                          var client_ip_address = socket.request.connection.remoteAddress;
+                          io.emit("message", {"user": "Server", "message": "User " + username +" has been kicked and blocked. IP: " + client_ip_address.toString(), "update": false, "time": today});
+                          var data = {
+                            ip: client_ip_address
+                          };
+                          var newIp = new Ip(data);
+                          newIp.save();
+                        } else {
+                          if(amount == -1) {
+                            io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Not enough users online to start kick", "update": false, "time": today});
+                          }
+                        }
+                      });
+                    } else {
+                      io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "You have already voted to kick that user", "update": false, "time": today});
+                    }
+                  } else {
+                    io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "That user does not exist", "update": false, "time": today});
+                  }
+                });
+              } else {
+                io.sockets.connected[socket.id].emit("message", {"user": "Server", "message": "Invalid token. Please revalidated token", "update": false, "time": today});
+              }
+            }
+          });
+        }
+      });
+    }
   });
 });

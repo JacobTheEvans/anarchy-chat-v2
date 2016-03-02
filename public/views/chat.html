@@ -26,7 +26,7 @@
         <span class="mdl-layout-title drawer-title custom-title">Anarchy Chat <i class="fa fa-comment"></i></span>
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link online-amount drawer-link" href=""><i class="fa fa-users"></i> {{numOfUsers}} Users Online</a>
-          <a class="mdl-navigation__link drawer-link" href="" ng-repeat="user in users track by $index">{{user}}</a>
+          <a class="mdl-navigation__link drawer-link" href="" ng-repeat="user in users track by $index" ng-click="kickShortcut(user)">{{user}}</a>
         </nav>
       </div>
       <main class="mdl-layout__content" ng-init="startIo()">

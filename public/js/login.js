@@ -21,7 +21,11 @@ app.controller("loginController", ["requests", "$scope", "$cookies", function(re
     $scope.buttonVis = false;
   };
   $scope.login = function(username) {
-    requests.reqLogin(username,$scope.setToken,$scope.logError);
+    if(username.indexOf(" ") == -1) {
+      requests.reqLogin(username,$scope.setToken,$scope.logError);
+    } else {
+      alert("No spaces in username");
+    }
   };
   $scope.setToken = function(response) {
     var date = new Date();
